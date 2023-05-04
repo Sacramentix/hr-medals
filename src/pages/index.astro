@@ -1,15 +1,35 @@
 ---
+
+//@ts-ignore
+const kv = await Deno.openKv();
+const d = new Date();
+const today = `${d.getUTCFullYear()}-${d.getMonth()}-${d.getDate()}`;
+const res = await kv.atomic()
+  .mutate({
+    type: "sum",
+    key: [today, "counter"],
+    //@ts-ignore
+    value: new Deno.KvU64(1n),
+  })
+  .commit();
+
+
+const counter:BigInt = (await kv.get([today, "counter"])).value;
+
+const visiteur = counter == 1n ? "1er visiteur" : counter + " visiteurs";
 ---
 
-<html lang="en">
+<html lang="fr">
 	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Félicitations</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
-	</body>
+        <h1>Félicitations!</h1>
+        <p>Vous êtes le {visiteur}!</p>
+    </body>
 </html>
+
