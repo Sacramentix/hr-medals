@@ -1,6 +1,5 @@
 ---
 import { getRuntime } from "@astrojs/cloudflare/runtime";
-import { Image } from '@astrojs/image/components';
 import diamondMedal from "../assets/svg/diamondMedal.svg";
 import goldMedal from "../assets/svg/goldMedal.svg";
 import silverMedal from "../assets/svg/silverMedal.svg";
@@ -41,10 +40,10 @@ const visiteurText = counter == 1n ? "er visiteur" : "ème visiteurs";
 			<p>Vous êtes le <strong>{counter}</strong>{visiteurText} aujourd'hui!</p>
 			<p>Voici une médaille virtuel non fongible en récompense.</p>
 			{
-				counter == 1n ? 	<Image src={diamondMedal} 	width={122} height={146} alt="Une médaille en diamant avec un ribon rouge" /> 	:
-				counter == 2n ? 	<Image src={goldMedal} 		width={122} height={146} alt="Une médaille en or avec un ribon rouge" /> 		:
-				counter == 3n ? 	<Image src={silverMedal} 	width={122} height={146} alt="Une médaille en argent avec un ribon rouge" /> 	:
-									<Image src={bronzeMedal} 	width={122} height={146} alt="Une médaille en bronze avec un ribon rouge" />
+				counter == 1n ?	<img src={diamondMedal}	width={122} height={146} alt="Une médaille en diamant avec un ribon rouge" /> 	:
+				counter == 2n ?	<img src={goldMedal}	width={122} height={146} alt="Une médaille en or avec un ribon rouge" /> 		:
+				counter == 3n ?	<img src={silverMedal} 	width={122} height={146} alt="Une médaille en argent avec un ribon rouge" /> 	:
+								<img src={bronzeMedal} 	width={122} height={146} alt="Une médaille en bronze avec un ribon rouge" />
 			}
 			
 			<p>
