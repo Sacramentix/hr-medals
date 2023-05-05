@@ -12,5 +12,8 @@
   "dependencies": {
     "@astrojs/cloudflare": "^6.2.4",
     "astro": "^2.4.1"
+  },
+  "engines": {
+    "node": "^16"
   }
 }
