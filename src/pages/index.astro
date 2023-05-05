@@ -9,7 +9,7 @@ const runtime:any = getRuntime(Astro.request);
 
 const url = new URL(Astro.request.url);
 
-const novisit = Astro.cookies.has("visit") ||	url.searchParams.has("noVisit");
+const novisit = Astro.cookies.has("visit") || !url.searchParams.has("new");
 
 const d = new Date();
 const today = `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`
