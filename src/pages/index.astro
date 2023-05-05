@@ -1,31 +1,94 @@
 ---
-import type { APIContext } from "astro";
 import { getRuntime } from "@astrojs/cloudflare/runtime";
+import { Image } from '@astrojs/image/components';
+import diamondMedal from "../assets/svg/diamondMedal.svg";
+import goldMedal from "../assets/svg/goldMedal.svg";
+import silverMedal from "../assets/svg/silverMedal.svg";
+import bronzeMedal from "../assets/svg/bronzeMedal.svg";
 
 const runtime:any = getRuntime(Astro.request);
+
+const url = new URL(Astro.request.url);
+
+const novisit = Astro.cookies.has("visit") ||	url.searchParams.has("noVisit");
 
 const d = new Date();
 const today = `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`
 
-const counter = BigInt(await runtime.env.LEADERBOARD_KV.get(today) ?? "0");
-runtime.env.LEADERBOARD_KV.put(today, counter+1n);
-
-
-//@ts-ignore
-const visiteur = counter == 1n ? "1er visiteur" : counter + " visiteurs";
+const counter = Astro.cookies.has("visit") ? BigInt(Astro.cookies.get("visit").value!) : BigInt(await runtime.env.LEADERBOARD_KV.get(today) ?? "0") + 1n;
+if (!novisit){
+	runtime.env.LEADERBOARD_KV.put(today, counter);
+	const now = new Date();
+	now.setTime(now.setHours(0,0,0,0)+1000*60*60*24/*1 day*/);
+	Astro.cookies.set("visit", counter+"", {
+		expires: now
+	});
+}
+const visiteurText = counter == 1n ? "er visiteur" : "ème visiteurs";
 ---
-
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content="Site de remerciment pour les recruteurs assidu."/>
 		<title>Félicitations</title>
 	</head>
 	<body>
-        <h1>Félicitations!</h1>
-        <p>Vous êtes le {visiteur} aujourd'hui!</p>
+		<main>
+			<h1>Félicitations!</h1>
+			<p>Vous êtes le <strong>{counter}</strong>{visiteurText} aujourd'hui!</p>
+			<p>Voici une médaille virtuel non fongible en récompense.</p>
+			{
+				counter == 1n ? 	<Image src={diamondMedal} 	width={122} height={146} alt="Une médaille en diamant avec un ribon rouge" /> 	:
+				counter == 2n ? 	<Image src={goldMedal} 		width={122} height={146} alt="Une médaille en or avec un ribon rouge" /> 		:
+				counter == 3n ? 	<Image src={silverMedal} 	width={122} height={146} alt="Une médaille en argent avec un ribon rouge" /> 	:
+									<Image src={bronzeMedal} 	width={122} height={146} alt="Une médaille en bronze avec un ribon rouge" />
+			}
+			
+			<p>
+				Je vous remercie particulièrement d'avoir consulter mon CV dans les moindres détails.
+				J'espère que vous ne me répondrez pas avec un mail automatique comme de nombreux recruteur.
+				Sur ce je vous souhaite une bonne fin de journée.
+			</p>
+			<p id="cookieInfo">
+				Ce site utilise un cookie pour garder en mémoire sous forme de nombre votre position dans la liste des visiteurs afin de de ne pas être comptabiliser 2 fois.
+				Vous pouvez cliquer <button onclick="document.cookie = '';document.querySelector('#cookieInfo').remove()">ici</button> pour le supprimer.
+			</p>
+		</main>
     </body>
 </html>
+<style is:global>
+* {
+	box-sizing: border-box;
+}
+html, body {
+	padding: 0;
+	margin: 0;
+}
+body {
+	background: #000;
+	color: #ccc;
+	font-family: 'Source Code Pro', monospace;
+	text-align: center;
+}
+main {
+	min-height: 100vh;
+	padding: 2ch;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+p {
+	max-width: 100%;
+	width: 75ch;
+}
+
+img {
+	filter: drop-shadow(0 0 15px #fffa)
+}
+</style>
 
