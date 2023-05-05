@@ -4,8 +4,11 @@ import { getRuntime } from "@astrojs/cloudflare/runtime";
 
 const runtime:any = getRuntime(Astro.request);
 
-const counter:bigint = (await runtime.env.LEADERBOARD_KV.get("counter")) ?? 0n;
-runtime.env.LEADERBOARD_KV.put("counter", counter+1n);
+const d = new Date();
+const today = `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`
+
+const counter = BigInt(await runtime.env.LEADERBOARD_KV.get(today) ?? "0");
+runtime.env.LEADERBOARD_KV.put(today, counter+1n);
 
 
 //@ts-ignore
@@ -22,7 +25,7 @@ const visiteur = counter == 1n ? "1er visiteur" : counter + " visiteurs";
 	</head>
 	<body>
         <h1>Félicitations!</h1>
-        <p>Vous êtes le {visiteur}!</p>
+        <p>Vous êtes le {visiteur} aujourd'hui!</p>
     </body>
 </html>
 
