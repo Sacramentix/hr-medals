@@ -1,16 +1,16 @@
 {
-  "name": "",
+  "name": "hr-medals",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "deno run --allow-net --allow-read --unstable --allow-env ./dist/server/entry.mjs",
+    "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/deno": "^4.1.0",
-    "astro": "^2.3.4"
+    "@astrojs/cloudflare": "^6.2.4",
+    "astro": "^2.4.1"
   }
 }

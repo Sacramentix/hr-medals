@@ -1,21 +1,7 @@
 ---
 
+
 //@ts-ignore
-const kv = await Deno.openKv();
-const d = new Date();
-const today = `${d.getUTCFullYear()}-${d.getMonth()}-${d.getDate()}`;
-const res = await kv.atomic()
-  .mutate({
-    type: "sum",
-    key: [today, "counter"],
-    //@ts-ignore
-    value: new Deno.KvU64(1n),
-  })
-  .commit();
-
-
-const counter:BigInt = (await kv.get([today, "counter"])).value;
-
 const visiteur = counter == 1n ? "1er visiteur" : counter + " visiteurs";
 ---
 
