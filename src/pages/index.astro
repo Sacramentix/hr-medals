@@ -1,4 +1,11 @@
 ---
+import type { APIContext } from "astro";
+import { getRuntime } from "@astrojs/cloudflare/runtime";
+
+const runtime:any = getRuntime(Astro.request);
+
+const counter:bigint = (await runtime.env.LEADERBOARD_KV.get("counter")) ?? 0n;
+runtime.env.LEADERBOARD_KV.put("counter", counter+1n);
 
 
 //@ts-ignore
